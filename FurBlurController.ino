@@ -1,0 +1,46 @@
+#include <Keyboard.h> // Include the keyboard library...
+const int blueButton = 6; //Blue button on digital pin 6...
+const int redButton = 5; //Red button on digital pin 5...
+const int joystickXAxisPin = 1; //joystick x axis on Analog pin 1...
+const int joystickYAxisPin = 0; //joystick y axis on Analog pin 0...
+
+//GAME CONTROLS//
+const int jumpButton = 119; //set jump to 'W'...
+const int shieldButton = 115; //set shield to 'S'...
+const int moveLeftButton = 97; //set left to 'A'...
+const int moveRightButton = 100; //set right to 'D'...
+
+void setup() {
+  Keyboard.begin(); //Initialize keyboard input...
+  pinMode(blueButton, INPUT_PULLUP); // Set blueButton's pin to input...
+  pinMode(redButton, INPUT_PULLUP); // Set redButton's pin to input... 
+}
+
+void loop() {
+
+//BUTTON STATES//
+  int joyXState = analogRead(1); //reads the current position/state the joystick is on (center = around 512)
+  int joyYState = analogRead(0); //up = 1023 and down = 0 center = about 512 (depending on spring and internal parts)
+  int blueState = digitalRead(blueButton); //reads the current state the blue button is in...
+  int redState = digitalRead(redButton); //reads the current state the red button is in...
+
+
+//BLUE BUTTON//
+  if (blueState == LOW) {Keyboard.press(jumpButton);} //if the blue button is pressed, simulate keyboard button press
+  else {Keyboard.release(jumpButton);} //if the button is not pressed, simulate keyboard button release
+  
+//RED BUTTON//
+  if (redState == LOW) {Keyboard.press(shieldButton);} //if the red button is pressed, simulate keyboard button press
+  else {Keyboard.release(shieldButton);} //if the button is not pressed, simulate keyboard button release
+
+//JOYSTICK X AXIS//
+  if (joyXState == 0) {Keyboard.press(moveLeftButton);} //if joystick is left then joyxState = 0 so simulate keyboard press
+  else if (joyXState >= 1023) {Keyboard.press(moveRightButton);} //if joystick is right then joyxstate = 1023 so simulate keyboard press
+  else {Keyboard.release(moveRightButton); Keyboard.release(moveLeftButton);} //these are needed to tell the system the key is no longer pressed
+
+//JOYSTICK Y AXIS// (currently not using y Axis its not needed in my game...)
+  //if (joyYState == 0) {Keyboard.press(121);}
+  //else if (joyYState >= 1023) {Keyboard.press(120);}
+  //else {Keyboard.release(121); Keyboard.release(120);}
+
+}
